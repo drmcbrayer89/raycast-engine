@@ -19,6 +19,10 @@ SDL_Rect floor_rect = { .x = 0, .y = (WINDOW_HEIGHT/2) - 1, .w = WINDOW_WIDTH - 
 
 uint16_t map[MAP_X][MAP_Y];
 
+float deg2rad(float deg) {
+  return deg*(M_PI/180.0);
+}
+
 void clearScreen(void) {
   SDL_SetRenderDrawColor(renderer, 125, 125, 125, 255);
   SDL_RenderClear(renderer);
@@ -72,15 +76,15 @@ void castRays(uint16_t ray_max) {
 
   for(ray = 0; ray < ray_max; ray++) {
     while(search == true) {
-      x = player.pos.x + t*cos(alpha * (M_PI/180));
-      y = player.pos.y + t*sin(alpha * (M_PI/180));
+      x = player.pos.x + t*cos(deg2rad(alpha));
+      y = player.pos.y + t*sin(deg2rad(alpha));
       
       gridx = unitsToGrid(x);
       gridy = unitsToGrid(y);
 
       if(gridx <= MAP_X && gridx >= 0 && gridy <= MAP_Y && gridy >= 0) {
         if(map[gridx][gridy] == 1) {
-          distance = t*cos((alpha - player.view_angle)*(M_PI/180));
+          distance = t*cos(deg2rad(alpha - player.view_angle));
           height = (float)(WALL_SIZE)/(float)distance;
           drawLine(ray, height * 256);
           x = player.pos.x;
@@ -116,15 +120,15 @@ bool loop(void) {
       case SDL_KEYDOWN:
         switch(e.key.keysym.sym) {
           case SDLK_w:
-            player.pos.y -= 32*sin((player.view_angle - 180)*(M_PI/180));
-            player.pos.x -= 32*cos((player.view_angle - 180)*(M_PI/180));
+            player.pos.y -= 32*sin(deg2rad(player.view_angle - 180));
+            player.pos.x -= 32*cos(deg2rad(player.view_angle - 180));
             break;
           case SDLK_a:
             if((player.view_angle-=2) < 0) { player.view_angle = 360.0; }
             break;
           case SDLK_s:
-            player.pos.y += 32*sin((player.view_angle - 180)*(M_PI/180));
-            player.pos.x += 32*cos((player.view_angle - 180)*(M_PI/180));
+            player.pos.y += 32*sin(deg2rad(player.view_angle - 180));
+            player.pos.x += 32*cos(deg2rad(player.view_angle - 180));
             break;
           case SDLK_d:
             if((player.view_angle+=2) > 360.0) { player.view_angle = 0.0; }
