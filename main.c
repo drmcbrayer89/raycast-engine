@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <math.h>
 #include "player.h"
 
@@ -14,7 +14,7 @@ SDL_Window * window = NULL;
 SDL_Renderer * renderer = NULL;
 PLAYER player;
 
-SDL_Rect ceiling_rect = { .x = 0, .y = 0, .w = WINDOW_WIDTH - 1, .h = (WINDOW_HEIGHT/2) - 1 };
+SDL_Rect ceiling_rect = { .x = 0, .y = 0, .w = 1, .h = 100 };
 SDL_Rect floor_rect = { .x = 0, .y = (WINDOW_HEIGHT/2) - 1, .w = WINDOW_WIDTH - 1, .h = WINDOW_HEIGHT - 1 };
 
 uint16_t map[MAP_X][MAP_Y];
@@ -26,9 +26,10 @@ float deg2rad(float deg) {
 void clearScreen(void) {
   SDL_SetRenderDrawColor(renderer, 125, 125, 125, 255);
   SDL_RenderClear(renderer);
-
+  /*
   SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderFillRect(renderer, &floor_rect);
+  */
 }
 
 void generateMap(void) {
@@ -62,7 +63,13 @@ int16_t unitsToGrid(float units) {
   return (int16_t)(floor(units/32));
 }
 
+void drawTextureRect(int32_t x, float height) {
+
+}
+
 void drawLine(int32_t x, float height, uint16_t color, uint16_t ray) {
+  int32_t val = 255;
+  /*
   int32_t val;
   float rgb_min = 200;
   float rgb_max = 255;
@@ -78,7 +85,7 @@ void drawLine(int32_t x, float height, uint16_t color, uint16_t ray) {
     rgb_scaled = (rgb_max-rgb_min) * (((float)ray - 500)/(800 + 500)) + rgb_min;
     val = 255 - (int32_t)rgb_scaled; 
   }
-
+  */
   switch(color) {
     case 1:
       SDL_SetRenderDrawColor(renderer, 0, val, 0, 255);
@@ -89,7 +96,7 @@ void drawLine(int32_t x, float height, uint16_t color, uint16_t ray) {
     default:
       break;
   }
-  SDL_RenderDrawLine(renderer, x, floor((WINDOW_HEIGHT/2) + (height/2)),
+  SDL_RenderLine(renderer, x, floor((WINDOW_HEIGHT/2) + (height/2)),
                                x, floor((WINDOW_HEIGHT/2) - (height/2)));
 }
 
@@ -142,32 +149,49 @@ bool loop(void) {
   SDL_Event e;
   // Handle rendering first, then hold for user input
   clearScreen();
-  castRays(WINDOW_WIDTH); 
+  castRays(WINDOW_WIDTH);
+  //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+  //SDL_RenderDrawRect(renderer, &ceiling_rect);
   SDL_RenderPresent(renderer);
   // Update player position/Quit. Dunno if this is correct
   while(SDL_PollEvent(&e) != 0) {
     switch(e.type) {
-      case SDL_QUIT:
+      case SDL_EVENT_QUIT:
         return false;
-      case SDL_KEYDOWN:
-        switch(e.key.keysym.sym) {
-          case SDLK_w:
+      case SDL_EVENT_KEY_DOWN:
+        if(e.key.key == SDLK_W) {
+          player.pos.y -= 32*sin(deg2rad(player.view_angle - 180));
+          player.pos.x -= 32*cos(deg2rad(player.view_angle - 180));
+        }
+        if(e.key.key == SDLK_S) {
+          player.pos.y += 32*sin(deg2rad(player.view_angle - 180));
+          player.pos.x += 32*cos(deg2rad(player.view_angle - 180));
+        }
+        if(e.key.key == SDLK_A) {
+          if((player.view_angle--) < 0) { player.view_angle = 360.0; }
+        }
+        if(e.key.key == SDLK_D) {
+          if((player.view_angle++) > 360.0) { player.view_angle = 0.0; }
+        }
+        /*
+        switch(e.key) {
+          case SDLK_W:
             player.pos.y -= 32*sin(deg2rad(player.view_angle - 180));
             player.pos.x -= 32*cos(deg2rad(player.view_angle - 180));
             break;
-          case SDLK_a:
+          case SDLK_A:
             if((player.view_angle--) < 0) { player.view_angle = 360.0; }
             break;
-          case SDLK_s:
+          case SDLK_S:
             player.pos.y += 32*sin(deg2rad(player.view_angle - 180));
             player.pos.x += 32*cos(deg2rad(player.view_angle - 180));
             break;
-          case SDLK_d:
+          case SDLK_D:
             if((player.view_angle++) > 360.0) { player.view_angle = 0.0; }
             break;
           default:
             break;
-        }
+        }*/
         break;
       default:
         break;
@@ -177,17 +201,20 @@ bool loop(void) {
 }
 
 bool init(void) {
-  if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
+  uint32_t flags = 0x0000;
+  flags |= SDL_INIT_AUDIO;
+  flags |= SDL_INIT_VIDEO;
+  
+  if(SDL_Init(flags) < 0)
     return false;
   
-  window = SDL_CreateWindow("Raycast Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
-                                                                    800, 600, SDL_WINDOW_SHOWN);
+  window = SDL_CreateWindow("Raycast Engine", WINDOW_WIDTH, WINDOW_HEIGHT, 0);
   if(!window)
     return false;
   else
     printf("SDL_CreateWindow Success\n");
 
-  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+  renderer = SDL_CreateRenderer(window, NULL);
   if(!renderer)
     return false;
   else
