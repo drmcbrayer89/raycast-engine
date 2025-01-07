@@ -106,6 +106,15 @@ void drawLine(int32_t x, float height, uint16_t color, bool vertical) {
                                x, floor((WINDOW_HEIGHT/2) - (height/2)));
 }
 
+int32_t min(int32_t x, int32_t y) {
+  if(x > y) {
+    return y;
+  }
+  else {
+    return x;
+  }
+}
+
 void castRays(uint16_t ray_max) {
   float alpha = player.view_angle - (player.fov / 2);
   float alpha_delta = (float)player.fov / (float)WINDOW_WIDTH; 
@@ -119,6 +128,7 @@ void castRays(uint16_t ray_max) {
   int16_t gridy = -1;
   bool search = true;
   bool vertical_wall = false;
+  uint32_t x_world, y_world;
  
   for(ray = 0; ray < ray_max; ray++) {
     while(search == true) {
@@ -127,10 +137,13 @@ void castRays(uint16_t ray_max) {
       
       gridx = unitsToGrid(x);
       gridy = unitsToGrid(y);
-
+      
+      x_world = floor(x);
+      y_world = floor(y);
+        
       if(gridx <= MAP_X && gridx >= 0 && gridy <= MAP_Y && gridy >= 0) {
         if(map[gridx][gridy] > 0) {
-          if(min(floor(x) % 64, 64-floor(x) % 64) < min(floor(y) % 64, (64-floor(y)) %64)) {
+          if(min(x_world % 64, (64-x_world) % 64) < min(y_world % 64, (64-y_world) %64)) {
             vertical_wall = true;
           }
           distance = t*cos(deg2rad(alpha - player.view_angle));
