@@ -1,0 +1,1 @@
+/usr/bin/cc -Wl,--dependency-file=CMakeFiles/MyEngine.dir/link.d CMakeFiles/MyEngine.dir/main.c.o -o MyEngine
