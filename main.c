@@ -67,8 +67,14 @@ void drawTextureRect(int32_t x, float height) {
 
 }
 
-void drawLine(int32_t x, float height, uint16_t color, uint16_t ray) {
-  int32_t val = 255;
+void drawLine(int32_t x, float height, uint16_t color, bool vertical) {
+  int32_t val = 0;
+  if(vertical) {
+    val = 180;
+  }
+  else {
+    val = 255;
+  }
   /*
   int32_t val;
   float rgb_min = 200;
@@ -112,6 +118,7 @@ void castRays(uint16_t ray_max) {
   int16_t gridx = -1;
   int16_t gridy = -1;
   bool search = true;
+  bool vertical_wall = false;
  
   for(ray = 0; ray < ray_max; ray++) {
     while(search == true) {
@@ -123,9 +130,12 @@ void castRays(uint16_t ray_max) {
 
       if(gridx <= MAP_X && gridx >= 0 && gridy <= MAP_Y && gridy >= 0) {
         if(map[gridx][gridy] > 0) {
+          if(fmin(fmod(x, 64.0), fmod(64.0-x, 64.0)) < fmin(fmod(y, 64.0), fmod(64.0-y, 64.0))) {
+            vertical_wall = true;
+          }
           distance = t*cos(deg2rad(alpha - player.view_angle));
           height = (float)(WALL_SIZE)/(float)distance;
-          drawLine(ray, height * 256, map[gridx][gridy], ray);
+          drawLine(ray, height * 256, map[gridx][gridy], vertical_wall);
           x = player.pos.x;
           y = player.pos.y;
           t = 0;
