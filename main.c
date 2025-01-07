@@ -67,11 +67,17 @@ void drawLine(int32_t x, float height, uint16_t color, uint16_t ray) {
   float rgb_min = 200;
   float rgb_max = 255;
   // scale ray to color
-  float rgb_scaled = (rgb_max-rgb_min) * (((float)ray - 0)/(800 + 0)) + rgb_min;
+  float rgb_scaled;// = (rgb_max-rgb_min) * (((float)ray - 0)/(800 + 0)) + rgb_min;
   
-  if(ray <= 300) { val = 128 + (int32_t)rgb_scaled; }
+  if(ray <= 300) { 
+    rgb_scaled = (rgb_max-rgb_min) * (((float)ray - 0)/(300 + 0)) + rgb_min;
+    val = 128 + (int32_t)rgb_scaled; 
+  }
   if(ray > 300 && ray < 500) { val = 255; }
-  if(ray >= 500) { val = 255 - (int32_t)rgb_scaled; }
+  if(ray >= 500) { 
+    rgb_scaled = (rgb_max-rgb_min) * (((float)ray - 500)/(800 + 500)) + rgb_min;
+    val = 255 - (int32_t)rgb_scaled; 
+  }
 
   switch(color) {
     case 1:
@@ -150,14 +156,14 @@ bool loop(void) {
             player.pos.x -= 32*cos(deg2rad(player.view_angle - 180));
             break;
           case SDLK_a:
-            if((player.view_angle-=2) < 0) { player.view_angle = 360.0; }
+            if((player.view_angle--) < 0) { player.view_angle = 360.0; }
             break;
           case SDLK_s:
             player.pos.y += 32*sin(deg2rad(player.view_angle - 180));
             player.pos.x += 32*cos(deg2rad(player.view_angle - 180));
             break;
           case SDLK_d:
-            if((player.view_angle+=2) > 360.0) { player.view_angle = 0.0; }
+            if((player.view_angle++) > 360.0) { player.view_angle = 0.0; }
             break;
           default:
             break;
