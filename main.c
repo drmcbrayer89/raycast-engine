@@ -130,7 +130,7 @@ void castRays(uint16_t ray_max) {
 
       if(gridx <= MAP_X && gridx >= 0 && gridy <= MAP_Y && gridy >= 0) {
         if(map[gridx][gridy] > 0) {
-          if(fmin(fmod(x, 64.0), fmod(64.0-x, 64.0)) < fmin(fmod(y, 64.0), fmod(64.0-y, 64.0))) {
+          if(min(floor(x) % 64, 64-floor(x) % 64) < min(floor(y) % 64, (64-floor(y)) %64)) {
             vertical_wall = true;
           }
           distance = t*cos(deg2rad(alpha - player.view_angle));
@@ -144,6 +144,7 @@ void castRays(uint16_t ray_max) {
         else { 
           t+=1; 
         }
+        vertical_wall = false;
       }
       else { search = false; } // out of bound?
     }
@@ -183,25 +184,6 @@ bool loop(void) {
         if(e.key.key == SDLK_D) {
           if((player.view_angle++) > 360.0) { player.view_angle = 0.0; }
         }
-        /*
-        switch(e.key) {
-          case SDLK_W:
-            player.pos.y -= 32*sin(deg2rad(player.view_angle - 180));
-            player.pos.x -= 32*cos(deg2rad(player.view_angle - 180));
-            break;
-          case SDLK_A:
-            if((player.view_angle--) < 0) { player.view_angle = 360.0; }
-            break;
-          case SDLK_S:
-            player.pos.y += 32*sin(deg2rad(player.view_angle - 180));
-            player.pos.x += 32*cos(deg2rad(player.view_angle - 180));
-            break;
-          case SDLK_D:
-            if((player.view_angle++) > 360.0) { player.view_angle = 0.0; }
-            break;
-          default:
-            break;
-        }*/
         break;
       default:
         break;
