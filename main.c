@@ -7,6 +7,7 @@
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 #define WALL_SIZE 256
+#define HALF_WALL_SIZE WALL_SIZE * 0.5
 #define MAP_X 64
 #define MAP_Y 64
 
@@ -14,8 +15,8 @@ SDL_Window * window = NULL;
 SDL_Renderer * renderer = NULL;
 PLAYER player;
 
-SDL_Rect ceiling_rect = { .x = 0, .y = 0, .w = 1, .h = 100 };
-SDL_Rect floor_rect = { .x = 0, .y = (WINDOW_HEIGHT/2) - 1, .w = WINDOW_WIDTH - 1, .h = WINDOW_HEIGHT - 1 };
+SDL_FRect ceiling_rect = { .x = 0, .y = 0, .w = 1, .h = 100 };
+SDL_FRect floor_rect = { .x = 0, .y = (WINDOW_HEIGHT/2) - 1, .w = WINDOW_WIDTH - 1, .h = WINDOW_HEIGHT - 1 };
 
 uint16_t map[MAP_X][MAP_Y];
 
@@ -26,10 +27,9 @@ float deg2rad(float deg) {
 void clearScreen(void) {
   SDL_SetRenderDrawColor(renderer, 125, 125, 125, 255);
   SDL_RenderClear(renderer);
-  /*
+  
   SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderFillRect(renderer, &floor_rect);
-  */
 }
 
 void generateMap(void) {
@@ -102,6 +102,7 @@ void drawLine(int32_t x, float height, uint16_t color, bool vertical) {
     default:
       break;
   }
+  
   SDL_RenderLine(renderer, x, floor((WINDOW_HEIGHT/2) + (height/2)),
                                x, floor((WINDOW_HEIGHT/2) - (height/2)));
 }

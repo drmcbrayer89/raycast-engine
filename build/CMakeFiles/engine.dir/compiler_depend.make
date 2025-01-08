@@ -117,6 +117,17 @@ CMakeFiles/engine.dir/main.c.o: /home/ryanm/dev/raycast-engine/main.c \
   /usr/local/include/SDL3/SDL_version.h \
   /usr/local/include/SDL3/SDL_video.h
 
+engine: /usr/lib/libc.so \
+  /usr/lib/libgcc_s.so \
+  /usr/lib/libm.so \
+  /usr/lib/ld-linux-x86-64.so.2
+
+
+/usr/lib/ld-linux-x86-64.so.2:
+
+/usr/lib/libm.so:
+
+/usr/lib/libgcc_s.so:
 
 /usr/local/include/SDL3/SDL_system.h:
 
@@ -289,6 +300,8 @@ CMakeFiles/engine.dir/main.c.o: /home/ryanm/dev/raycast-engine/main.c \
 /usr/include/stdc-predef.h:
 
 /usr/include/sys/cdefs.h:
+
+/usr/lib/libc.so:
 
 /usr/include/bits/fp-fast.h:
 

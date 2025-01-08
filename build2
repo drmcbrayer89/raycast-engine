@@ -1,1 +1,0 @@
-gcc -o a *.c `pkg-config sdl3 --cflags --libs` -lm
