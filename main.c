@@ -4,6 +4,7 @@
 #include <SDL3_image/SDL_image.h>
 #include <math.h>
 #include "player.h"
+#include "formulas.h"
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -22,10 +23,11 @@ SDL_FRect floor_rect = { .x = 0, .y = (WINDOW_HEIGHT/2) - 1, .w = WINDOW_WIDTH -
 SDL_Texture * wall_texture;
 
 uint16_t map[MAP_X][MAP_Y];
-
+/*
 float deg2rad(float deg) {
   return deg*(M_PI/180.0);
 }
+*/
 
 void clearScreen(void) {
   SDL_SetRenderDrawColor(renderer, 125, 125, 125, 255);
@@ -61,11 +63,11 @@ void generateMap(void) {
     map[x][10] = 2;
   }
 }
-
+/*
 int16_t unitsToGrid(float units) {
   return (int16_t)(floor(units/32));
 }
-
+*/
 void drawTextureRect(int32_t x, float height, uint16_t texture_num) {
   SDL_Texture * texture;
   /*
@@ -110,7 +112,7 @@ void drawLine(int32_t x, float height, uint16_t color, bool vertical) {
   SDL_RenderLine(renderer, x, (WINDOW_HEIGHT/2) + (height/2),
                                x, (WINDOW_HEIGHT/2) - (height/2));
 }
-
+/*
 int32_t min(int32_t x, int32_t y) {
   if(x > y) {
     return y;
@@ -119,7 +121,7 @@ int32_t min(int32_t x, int32_t y) {
     return x;
   }
 }
-
+*/
 void castRays(uint16_t ray_max) {
   float alpha = player.view_angle - (player.fov / 2);
   float alpha_delta = (float)player.fov / (float)WINDOW_WIDTH; 

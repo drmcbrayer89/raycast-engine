@@ -74,4 +74,5 @@ CMakeFiles/engine.dir/main.c.o: /home/ryanm/dev/raycast-engine/main.c \
  /usr/include/bits/flt-eval-method.h /usr/include/bits/fp-logb.h \
  /usr/include/bits/fp-fast.h \
  /usr/include/bits/mathcalls-helper-functions.h \
- /usr/include/bits/mathcalls.h /home/ryanm/dev/raycast-engine/player.h
+ /usr/include/bits/mathcalls.h /home/ryanm/dev/raycast-engine/player.h \
+ /home/ryanm/dev/raycast-engine/formulas.h

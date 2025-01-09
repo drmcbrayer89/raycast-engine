@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
 find_package(SDL3_image REQUIRED)
 
-add_executable(engine main.c)
+add_executable(engine main.c formulas.c)
 
 target_link_libraries(engine  
                       PRIVATE SDL3::SDL3

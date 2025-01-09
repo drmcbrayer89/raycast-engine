@@ -129,6 +129,30 @@ engine/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/build
 .PHONY : engine/fast
 
+formulas.o: formulas.c.o
+.PHONY : formulas.o
+
+# target to build an object file
+formulas.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/formulas.c.o
+.PHONY : formulas.c.o
+
+formulas.i: formulas.c.i
+.PHONY : formulas.i
+
+# target to preprocess a source file
+formulas.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/formulas.c.i
+.PHONY : formulas.c.i
+
+formulas.s: formulas.c.s
+.PHONY : formulas.s
+
+# target to generate assembly for a file
+formulas.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/formulas.c.s
+.PHONY : formulas.c.s
+
 main.o: main.c.o
 .PHONY : main.o
 
@@ -162,6 +186,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... engine"
+	@echo "... formulas.o"
+	@echo "... formulas.i"
+	@echo "... formulas.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
