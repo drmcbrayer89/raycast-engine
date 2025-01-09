@@ -3,6 +3,7 @@
 
 CMakeFiles/engine.dir/main.c.o: /home/ryanm/dev/raycast-engine/main.c \
   /home/ryanm/dev/raycast-engine/player.h \
+  /usr/include/SDL3_image/SDL_image.h \
   /usr/include/bits/byteswap.h \
   /usr/include/bits/endian.h \
   /usr/include/bits/endianness.h \
@@ -207,6 +208,10 @@ engine: /usr/lib/libc.so \
 
 /usr/local/include/SDL3/SDL_atomic.h:
 
+/usr/local/include/SDL3/SDL_storage.h:
+
+/usr/local/include/SDL3/SDL_asyncio.h:
+
 /usr/local/include/SDL3/SDL_process.h:
 
 /usr/include/bits/wordsize.h:
@@ -251,6 +256,10 @@ engine: /usr/lib/libc.so \
 
 /usr/include/bits/math-vector.h:
 
+/usr/include/bits/long-double.h:
+
+/usr/include/bits/fp-logb.h:
+
 /usr/local/include/SDL3/SDL_render.h:
 
 /home/ryanm/dev/raycast-engine/main.c:
@@ -271,6 +280,8 @@ engine: /usr/lib/libc.so \
 
 /usr/include/bits/libm-simd-decl-stubs.h:
 
+/usr/include/SDL3_image/SDL_image.h:
+
 /usr/include/bits/floatn-common.h:
 
 /usr/include/bits/types/mbstate_t.h:
@@ -278,12 +289,6 @@ engine: /usr/lib/libc.so \
 /usr/local/include/SDL3/SDL_haptic.h:
 
 /usr/include/bits/byteswap.h:
-
-/usr/include/bits/long-double.h:
-
-/usr/include/bits/fp-logb.h:
-
-/usr/include/bits/types/__mbstate_t.h:
 
 /usr/local/include/SDL3/SDL_filesystem.h:
 
@@ -304,6 +309,8 @@ engine: /usr/lib/libc.so \
 /usr/lib/libc.so:
 
 /usr/include/bits/fp-fast.h:
+
+/usr/include/bits/types/__mbstate_t.h:
 
 /usr/include/bits/stdint-uintn.h:
 
@@ -356,7 +363,3 @@ engine: /usr/lib/libc.so \
 /usr/local/include/SDL3/SDL.h:
 
 /usr/local/include/SDL3/SDL_assert.h:
-
-/usr/local/include/SDL3/SDL_storage.h:
-
-/usr/local/include/SDL3/SDL_asyncio.h:

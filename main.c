@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
 #include <math.h>
 #include "player.h"
 
@@ -15,8 +16,10 @@ SDL_Window * window = NULL;
 SDL_Renderer * renderer = NULL;
 PLAYER player;
 
-SDL_FRect ceiling_rect = { .x = 0, .y = 0, .w = 1, .h = 100 };
+SDL_FRect img_rect = { .x = 0, .y = 0, .w = 64, .h = 64 };
 SDL_FRect floor_rect = { .x = 0, .y = (WINDOW_HEIGHT/2) - 1, .w = WINDOW_WIDTH - 1, .h = WINDOW_HEIGHT - 1 };
+
+SDL_Texture * wall_texture;
 
 uint16_t map[MAP_X][MAP_Y];
 
@@ -63,8 +66,25 @@ int16_t unitsToGrid(float units) {
   return (int16_t)(floor(units/32));
 }
 
-void drawTextureRect(int32_t x, float height) {
-
+void drawTextureRect(int32_t x, float height, uint16_t texture_num) {
+  SDL_Texture * texture;
+  /*
+  SDL_FRect srcrect = { x = x, .y = 0, .w = 1, .h = height };
+  SDL_FRect dstrect = { .x = x, .y = (WINDOW_HEIGHT/2) + (height/2), .w = 1, .h = height };
+  
+  switch(texture_num) {
+    case 0:
+      break;
+    case 1:
+      texture = IMG_LoadTexture(renderer, "Bricks.png");
+      SDL_RenderTexture(renderer, texture, &srcrect, &dstrect);
+      break;
+    case 2:
+      break;
+    default:
+      break;
+  }
+  */
 }
 
 void drawLine(int32_t x, float height, uint16_t color, bool vertical) {
@@ -75,23 +95,7 @@ void drawLine(int32_t x, float height, uint16_t color, bool vertical) {
   else {
     val = 255;
   }
-  /*
-  int32_t val;
-  float rgb_min = 200;
-  float rgb_max = 255;
-  // scale ray to color
-  float rgb_scaled;// = (rgb_max-rgb_min) * (((float)ray - 0)/(800 + 0)) + rgb_min;
-  
-  if(ray <= 300) { 
-    rgb_scaled = (rgb_max-rgb_min) * (((float)ray - 0)/(300 + 0)) + rgb_min;
-    val = 128 + (int32_t)rgb_scaled; 
-  }
-  if(ray > 300 && ray < 500) { val = 255; }
-  if(ray >= 500) { 
-    rgb_scaled = (rgb_max-rgb_min) * (((float)ray - 500)/(800 + 500)) + rgb_min;
-    val = 255 - (int32_t)rgb_scaled; 
-  }
-  */
+
   switch(color) {
     case 1:
       SDL_SetRenderDrawColor(renderer, 0, val, 0, 255);
@@ -103,8 +107,8 @@ void drawLine(int32_t x, float height, uint16_t color, bool vertical) {
       break;
   }
   
-  SDL_RenderLine(renderer, x, floor((WINDOW_HEIGHT/2) + (height/2)),
-                               x, floor((WINDOW_HEIGHT/2) - (height/2)));
+  SDL_RenderLine(renderer, x, (WINDOW_HEIGHT/2) + (height/2),
+                               x, (WINDOW_HEIGHT/2) - (height/2));
 }
 
 int32_t min(int32_t x, int32_t y) {
@@ -150,6 +154,7 @@ void castRays(uint16_t ray_max) {
           distance = t*cos(deg2rad(alpha - player.view_angle));
           height = (float)(WALL_SIZE)/(float)distance;
           drawLine(ray, height * 256, map[gridx][gridy], vertical_wall);
+          //drawTextureRect(ray, height * 256, map[gridx][gridy]);
           x = player.pos.x;
           y = player.pos.y;
           t = 0;
@@ -172,11 +177,12 @@ void castRays(uint16_t ray_max) {
 
 bool loop(void) {
   SDL_Event e;
-  // Handle rendering first, then hold for user input
   clearScreen();
   castRays(WINDOW_WIDTH);
-  //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-  //SDL_RenderDrawRect(renderer, &ceiling_rect);
+  wall_texture = IMG_LoadTexture(renderer, "./64x/Bricks.png");
+  if(SDL_RenderTexture(renderer, wall_texture, NULL, &img_rect) == 0) {
+      printf("Error loading texture.\n");
+  }
   SDL_RenderPresent(renderer);
   // Update player position/Quit. Dunno if this is correct
   while(SDL_PollEvent(&e) != 0) {
@@ -234,10 +240,10 @@ bool init(void) {
 
 void main(void) {
   player.pos.x = 100;
-  player.pos.y = 100;//WINDOW_HEIGHT/2;
+  player.pos.y = 100;
   player.view_angle = 90;
   player.fov = 60;
-
+  
   generateMap();
   // run init & then loop
   if(init()) {

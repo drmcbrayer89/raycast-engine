@@ -4,6 +4,7 @@
 CMakeFiles/engine.dir/main.c.o
  /home/ryanm/dev/raycast-engine/main.c
  /home/ryanm/dev/raycast-engine/player.h
+ /usr/include/SDL3_image/SDL_image.h
  /usr/include/bits/byteswap.h
  /usr/include/bits/endian.h
  /usr/include/bits/endianness.h

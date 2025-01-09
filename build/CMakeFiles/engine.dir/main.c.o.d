@@ -68,7 +68,8 @@ CMakeFiles/engine.dir/main.c.o: /home/ryanm/dev/raycast-engine/main.c \
  /usr/local/include/SDL3/SDL_system.h /usr/local/include/SDL3/SDL_time.h \
  /usr/local/include/SDL3/SDL_timer.h /usr/local/include/SDL3/SDL_tray.h \
  /usr/local/include/SDL3/SDL_version.h \
- /usr/local/include/SDL3/SDL_oldnames.h /usr/include/math.h \
+ /usr/local/include/SDL3/SDL_oldnames.h \
+ /usr/include/SDL3_image/SDL_image.h /usr/include/math.h \
  /usr/include/bits/math-vector.h /usr/include/bits/libm-simd-decl-stubs.h \
  /usr/include/bits/flt-eval-method.h /usr/include/bits/fp-logb.h \
  /usr/include/bits/fp-fast.h \
