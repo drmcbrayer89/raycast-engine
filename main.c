@@ -61,7 +61,7 @@ void generateMap(void) {
 
 void drawTextureRect(int32_t x, float height, uint16_t texture_num) {
   SDL_Texture * texture;
-  /*
+  // Just draw _any_ part of the texture to the wall 
   SDL_FRect srcrect = { x = x, .y = 0, .w = 1, .h = height };
   SDL_FRect dstrect = { .x = x, .y = (WINDOW_HEIGHT/2) + (height/2), .w = 1, .h = height };
   
@@ -77,7 +77,8 @@ void drawTextureRect(int32_t x, float height, uint16_t texture_num) {
     default:
       break;
   }
-  */
+  SDL_RenderPresent(renderer);
+  
 }
 
 void drawLine(int32_t x, float height, uint16_t color, bool vertical) {
@@ -161,14 +162,18 @@ void castRays(uint16_t ray_max) {
 
 bool loop(void) {
   SDL_Event e;
+  
   clearScreen();
   castRays(WINDOW_WIDTH);
+  
   wall_texture = IMG_LoadTexture(renderer, "./64x/Bricks.png");
+  
   if(SDL_RenderTexture(renderer, wall_texture, NULL, &img_rect) == 0) {
       printf("Error loading texture.\n");
   }
+  
   SDL_RenderPresent(renderer);
-  // Update player position/Quit. Dunno if this is correct
+ 
   while(SDL_PollEvent(&e) != 0) {
     switch(e.type) {
       case SDL_EVENT_QUIT:

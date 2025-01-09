@@ -1,7 +1,5 @@
 #include <stdint.h>
 #include <math.h>
-//#include "formulas.h"
-
 
 float deg2rad(float deg) {
   return (deg * (M_PI/180.0));
