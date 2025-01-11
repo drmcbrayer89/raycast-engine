@@ -59,17 +59,18 @@ void generateMap(void) {
   }
 }
 
+// Need to do a little bit of math, but this is drawing something now.
 void drawTextureRect(int32_t x, float height, uint16_t texture_num) {
   SDL_Texture * texture;
   // Just draw _any_ part of the texture to the wall 
-  SDL_FRect srcrect = { x = x, .y = 0, .w = 1, .h = height };
-  SDL_FRect dstrect = { .x = x, .y = (WINDOW_HEIGHT/2) + (height/2), .w = 1, .h = height };
+  SDL_FRect srcrect = { .x = x, .y = 0, .w = 64, .h = 64 };
+  SDL_FRect dstrect = { .x = x, .y = (WINDOW_HEIGHT/2), .w = 64, .h = 64 };
   
   switch(texture_num) {
     case 0:
       break;
     case 1:
-      texture = IMG_LoadTexture(renderer, "Bricks.png");
+      texture = IMG_LoadTexture(renderer, "./64x/Bricks.png");
       SDL_RenderTexture(renderer, texture, &srcrect, &dstrect);
       break;
     case 2:
@@ -78,7 +79,6 @@ void drawTextureRect(int32_t x, float height, uint16_t texture_num) {
       break;
   }
   SDL_RenderPresent(renderer);
-  
 }
 
 void drawLine(int32_t x, float height, uint16_t color, bool vertical) {
@@ -103,6 +103,17 @@ void drawLine(int32_t x, float height, uint16_t color, bool vertical) {
   
   SDL_RenderLine(renderer, x, (WINDOW_HEIGHT/2) + (height/2),
                                x, (WINDOW_HEIGHT/2) - (height/2));
+}
+// WORKED!
+void testTextures(void) {
+  SDL_Texture * texture;
+  // Just draw _any_ part of the texture to the wall 
+  SDL_FRect srcrect = { .x = 0, .y = 0, .w = 64, .h = 64 };
+  SDL_FRect dstrect = { .x = 128, .y = 128, .w = 64, .h = 64 };
+
+  SDL_Texture * t = IMG_LoadTexture(renderer, "./64x/Bricks.png");
+  SDL_RenderTexture(renderer, t, &srcrect, &dstrect);
+  SDL_RenderPresent(renderer);
 }
 
 void castRays(uint16_t ray_max) {
@@ -138,8 +149,8 @@ void castRays(uint16_t ray_max) {
           }
           distance = t*cos(deg2rad(alpha - player.view_angle));
           height = (float)(WALL_SIZE)/(float)distance;
-          drawLine(ray, height * 1024, map[gridx][gridy], vertical_wall);
-          //drawTextureRect(ray, height * 256, map[gridx][gridy]);
+          //drawLine(ray, height * 1024, map[gridx][gridy], vertical_wall);
+          drawTextureRect(ray, height * 256, map[gridx][gridy]);
           x = player.pos.x;
           y = player.pos.y;
           t = 0;
@@ -165,7 +176,7 @@ bool loop(void) {
   
   clearScreen();
   castRays(WINDOW_WIDTH);
-  
+  //testTextures();
   wall_texture = IMG_LoadTexture(renderer, "./64x/Bricks.png");
   
   if(SDL_RenderTexture(renderer, wall_texture, NULL, &img_rect) == 0) {
@@ -180,18 +191,18 @@ bool loop(void) {
         return false;
       case SDL_EVENT_KEY_DOWN:
         if(e.key.key == SDLK_W) {
-          player.pos.y -= 32*sin(deg2rad(player.view_angle - 180));
-          player.pos.x -= 32*cos(deg2rad(player.view_angle - 180));
+          player.pos.y -= 64*sin(deg2rad(player.view_angle - 180));
+          player.pos.x -= 64*cos(deg2rad(player.view_angle - 180));
         }
         if(e.key.key == SDLK_S) {
-          player.pos.y += 32*sin(deg2rad(player.view_angle - 180));
-          player.pos.x += 32*cos(deg2rad(player.view_angle - 180));
+          player.pos.y += 64*sin(deg2rad(player.view_angle - 180));
+          player.pos.x += 64*cos(deg2rad(player.view_angle - 180));
         }
         if(e.key.key == SDLK_A) {
-          if((player.view_angle--) < 0) { player.view_angle = 360.0; }
+          if((player.view_angle-=5) < 0) { player.view_angle = 360.0; }
         }
         if(e.key.key == SDLK_D) {
-          if((player.view_angle++) > 360.0) { player.view_angle = 0.0; }
+          if((player.view_angle+=5) > 360.0) { player.view_angle = 0.0; }
         }
         break;
       default:
