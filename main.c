@@ -149,8 +149,8 @@ void castRays(uint16_t ray_max) {
           }
           distance = t*cos(deg2rad(alpha - player.view_angle));
           height = (float)(WALL_SIZE)/(float)distance;
-          //drawLine(ray, height * 1024, map[gridx][gridy], vertical_wall);
-          drawTextureRect(ray, height * 256, map[gridx][gridy]);
+          drawLine(ray, height * 1024, map[gridx][gridy], vertical_wall);
+          //drawTextureRect(ray, height * 256, map[gridx][gridy]);
           x = player.pos.x;
           y = player.pos.y;
           t = 0;
@@ -173,7 +173,8 @@ void castRays(uint16_t ray_max) {
 
 bool loop(void) {
   SDL_Event e;
-  
+  int16_t dx, dy;
+
   clearScreen();
   castRays(WINDOW_WIDTH);
   //testTextures();
@@ -185,22 +186,46 @@ bool loop(void) {
   
   SDL_RenderPresent(renderer);
  
+  dx = player.pos.x;
+  dy = player.pos.y;
+
   while(SDL_PollEvent(&e) != 0) {
     switch(e.type) {
       case SDL_EVENT_QUIT:
         return false;
       case SDL_EVENT_KEY_DOWN:
         if(e.key.key == SDLK_W) {
-          player.pos.y -= 64*sin(deg2rad(player.view_angle - 180));
-          player.pos.x -= 64*cos(deg2rad(player.view_angle - 180));
+          // check collision with wall
+          dy -= 64*sin(deg2rad(player.view_angle - 180));
+          dx -= 64*cos(deg2rad(player.view_angle - 180));
+          
+          if(map[unitsToGrid(dx)][unitsToGrid(dy)] == 0) {
+            player.pos.x = dx;
+            player.pos.y = dy;
+          }
+          else {
+            printf("collision detected\n");
+          }
         }
+       
         if(e.key.key == SDLK_S) {
-          player.pos.y += 64*sin(deg2rad(player.view_angle - 180));
-          player.pos.x += 64*cos(deg2rad(player.view_angle - 180));
+          // check collision with wall
+          dy += 64*sin(deg2rad(player.view_angle - 180));
+          dx += 64*cos(deg2rad(player.view_angle - 180));
+
+          if(map[unitsToGrid(dx+32)][unitsToGrid(dy+32)] == 0) {
+              player.pos.x = dx;
+              player.pos.y = dy;
+          }
+          else {
+            printf("collision detected\n");
+          }
         }
+       
         if(e.key.key == SDLK_A) {
           if((player.view_angle-=5) < 0) { player.view_angle = 360.0; }
         }
+        
         if(e.key.key == SDLK_D) {
           if((player.view_angle+=5) > 360.0) { player.view_angle = 0.0; }
         }
